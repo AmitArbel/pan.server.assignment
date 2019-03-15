@@ -5,7 +5,9 @@
   "main": "app.js",
   "dependencies": {
     "@types/express": "^4.16.1",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
+    "ts-node-dev": "^1.0.0-pre.32",
     "typescript": "^3.3.3333"
   },
   "devDependencies": {},
