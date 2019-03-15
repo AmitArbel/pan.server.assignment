@@ -1,4 +1,7 @@
-import {DeviceType, GetDevicesResponse, IDevice, IEventLogEntry, INewDeviceParams} from "./interfaces";
+import {
+    AddDeviceResponse, DeviceType, GetDevicesResponse, IDevice, IEventLogEntry,
+    INewDeviceParams
+} from "./interfaces";
 import {DeviceStatuses, DeviceTypes, EventLogEntrySeverities, EventLogEntryTypes} from "./consts";
 
 const DeviceBrandsByType = {
@@ -45,22 +48,14 @@ export class Devices {
 
         return this.devices;
     }
-/*
-    public addDevice(params: INewDeviceParams): Observable<AddDeviceResponse> {
-        const newDeviceObservable = new Observable<AddDeviceResponse>(observer => {
-            setTimeout(() => {
-                const newDevice = this.generateDevice(params);
-                this.devices.unshift(newDevice);
 
-                observer.next(newDevice);
-                observer.complete();
+    public addDevice(params: INewDeviceParams): AddDeviceResponse {
+        const newDevice = this.generateDevice(params);
+        this.devices.unshift(newDevice);
 
-            }, 1000);
-        });
-
-        return newDeviceObservable;
+        return newDevice;
     }
-*/
+
     private devicesGenerator(count: number = 10): IDevice[] {
         const devices = [];
 

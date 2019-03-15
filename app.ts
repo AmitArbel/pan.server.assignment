@@ -1,6 +1,7 @@
 import express = require('express');
 import cors = require('cors');
 import {Devices} from "./devices";
+import bodyParser = require("body-parser");
 
 // Create a new express application instance
 const app: express.Application = express();
@@ -21,10 +22,17 @@ app.use(cors({
         return callback(null, true);
     }
 }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/devices', (req: Request, res: Response) => {
     const devices = devicesSvc.getDevices();
     res.send(devices);
+});
+
+app.post('/device', (req: Request, res: Response) => {
+    const newDevice = devicesSvc.addDevice(req.body);
+    res.send(newDevice);
 });
 
 app.listen(3000, function () {
