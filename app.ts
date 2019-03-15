@@ -3,9 +3,10 @@ import {Devices} from "./devices";
 
 // Create a new express application instance
 const app: express.Application = express();
+const devicesSvc = new Devices();
 
 app.get('/devices', (req: Request, res: Response) => {
-    const devices = Devices.getDevices();
+    const devices = devicesSvc.getDevices();
     res.send(devices);
 });
 
