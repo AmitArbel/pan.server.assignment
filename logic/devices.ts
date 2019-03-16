@@ -1,8 +1,8 @@
 import {
     AddDeviceResponse, DeviceType, GetDevicesResponse, IDevice, IEventLogEntry,
     INewDeviceParams
-} from "./interfaces";
-import {DeviceStatuses, DeviceTypes, EventLogEntrySeverities, EventLogEntryTypes} from "./consts";
+} from "../common/interfaces";
+import {DeviceStatuses, DeviceTypes, EventLogEntrySeverities, EventLogEntryTypes} from "../common/consts";
 
 const DeviceBrandsByType = {
     [DeviceTypes.mobile]: {

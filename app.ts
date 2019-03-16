@@ -1,11 +1,10 @@
 import express = require('express');
 import cors = require('cors');
-import {Devices} from "./devices";
 import bodyParser = require("body-parser");
+import {DevicesRouter} from "./controllers/devices";
 
 // Create a new express application instance
 const app: express.Application = express();
-const devicesSvc = new Devices();
 
 var allowedOrigins = ['http://localhost:4200'];
 app.use(cors({
@@ -25,16 +24,9 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/devices', (req: Request, res: Response) => {
-    const devices = devicesSvc.getDevices();
-    res.send(devices);
-});
-
-app.post('/device', (req: Request, res: Response) => {
-    const newDevice = devicesSvc.addDevice(req.body);
-    res.send(newDevice);
-});
+app.use('/devices', DevicesRouter);
 
 app.listen(3000, function () {
     console.log('Devices server listening on port 3000');
+    console.log('Look at https://github.com/AmitArbel/pan.assignment for client details.');
 });
