@@ -1,9 +1,9 @@
 import {
-    AddDeviceResponse, DeviceType, GetDevicesResponse, IDevice, IEventLogEntry,
-    INewDeviceParams
+    AddDeviceResponse, DeviceType, GetDevicesResponse, IBaseDevice, IDevice, IEventLogEntry,
 } from "../common/interfaces";
 import {DeviceStatuses, DeviceTypes, EventLogEntrySeverities, EventLogEntryTypes} from "../common/consts";
 
+// Internal: Will be used for generating device name
 const DeviceBrandsByType = {
     [DeviceTypes.mobile]: {
         Samsung: 0,
@@ -28,6 +28,7 @@ const DeviceBrandsByType = {
     }
 };
 
+// Internal: Will be used for generating device event description
 const descriptions = [
     'something bad happend',
     'user had logged in',
@@ -43,13 +44,15 @@ export class Devices {
 
     public getDevices(): GetDevicesResponse {
         if (!this.devices) {
+            // Using internal devices generator for mocking devices base data
             this.devices = this.devicesGenerator();
         }
 
         return this.devices;
     }
 
-    public addDevice(params: INewDeviceParams): AddDeviceResponse {
+    public addDevice(params: IBaseDevice): AddDeviceResponse {
+        // Generating mock data for new device (excepts for information given in the params)
         const newDevice = this.generateDevice(params);
         this.devices.unshift(newDevice);
 
@@ -66,14 +69,14 @@ export class Devices {
         return devices;
     }
 
-    private generateDevice(params?: INewDeviceParams): IDevice {
+    private generateDevice(params?: IBaseDevice): IDevice {
         params = params || {} as INewDeviceParams;
 
         const deviceType = this.getRandomValue(DeviceTypes);
 
         const newDevice: IDevice = {
             name: params.name || this.generateName(deviceType),
-            ipAddress: params.ip || this.generateIP(),
+            ipAddress: params.ipAddress || this.generateIP(),
             type: deviceType,
             status: this.getRandomValue(DeviceStatuses),
             events: this.generateEvents(),
@@ -90,7 +93,9 @@ export class Devices {
         return ip.join('.');
     }
 
-    private generateName(ofType: DeviceType) {
+    // Internal: Generating device name by its type
+    // The result would be something like "Apple mobile device #1" or "IBM server machine #1"
+    private generateName(ofType: DeviceType): string {
         const deviceBrands = DeviceBrandsByType[ofType];
         const deviceBrand = this.getRandomValue(deviceBrands, true);
         const deviceBrandCounter = ++deviceBrands[deviceBrand];
@@ -130,15 +135,19 @@ export class Devices {
         return event;
     }
 
-    private getRandomValue(ofObject: object, returnKey: boolean = false) {
+    // Internal: Getting Random value out of an object or array.
+    private getRandomValue(ofObject: object | Array, returnKey: boolean = false) {
         const objectKeys = Object.keys(ofObject);
         const randomKeyIndex = Math.floor(objectKeys.length * Math.random());
 
         const randomKey = objectKeys[randomKeyIndex];
+
+        // In case the key is required, returning it here.
         if (returnKey) {
             return randomKey;
         }
 
+        // Getting and returning the value.
         const randomValue = ofObject[randomKey];
         return randomValue;
     }
